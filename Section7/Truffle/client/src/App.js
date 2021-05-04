@@ -9,11 +9,8 @@ class App extends Component {
 
     componentDidMount = async () => {
         try {
-// Get network provider and web3 instance.
             this.web3 = await getWeb3();
-// Use web3 to get the user's accounts.
             this.accounts = await this.web3.eth.getAccounts();
-// Get the contract instance.
             const networkId = await this.web3.eth.net.getId();
             this.itemManager = new this.web3.eth.Contract(
                 ItemManager.abi,
@@ -25,7 +22,6 @@ class App extends Component {
             );
             this.setState({loaded: true});
         } catch (error) {
-// Catch any errors for any of the above operations.
             alert(
                 `Failed to load web3, accounts, or contract. Check console for details.`,
             );
@@ -35,14 +31,8 @@ class App extends Component {
 
     runExample = async () => {
         const {accounts, contract} = this.state;
-
-        // Stores a given value, 5 by default.
         await contract.methods.set(5).send({from: accounts[0]});
-
-        // Get the value from the contract to prove it worked.
         const response = await contract.methods.get().call();
-
-        // Update state with the result.
         this.setState({storageValue: response});
     };
 
@@ -50,8 +40,7 @@ class App extends Component {
         const {cost, itemName} = this.state;
         console.log(itemName, cost, this.itemManager);
         let result = await this.itemManager.methods.createItem(itemName, cost).send({
-            from:
-                this.accounts[0]
+            from: this.accounts[0]
         });
         console.log(result);
         alert("Send " + cost + " Wei to " + result.events.SupplyChainStep.returnValues._address);
@@ -61,9 +50,7 @@ class App extends Component {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
-        this.setState({
-            [name]: value
-        });
+        this.setState({[name]: value});
     }
 
     render() {
@@ -72,8 +59,9 @@ class App extends Component {
         }
         return (
             <div className="App">
-                <h1>Simply Payment/Supply Chain Example!</h1>
+                <h1>Supply Chain Example!</h1>
                 <h2>Items</h2>
+
                 <h2>Add Element</h2>
                 Cost: <input type="text" name="cost" value={this.state.cost} onChange={this.handleInputChange}/>
                 Item Name: <input type="text" name="itemName" value={this.state.itemName}
