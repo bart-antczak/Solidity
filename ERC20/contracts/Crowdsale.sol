@@ -1,10 +1,10 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.6.0;
 
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/GSN/Context.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /**
  * @title Crowdsale
@@ -194,7 +194,7 @@ contract Crowdsale is Context, ReentrancyGuard {
     /**
      * @dev Determines how ETH is stored/forwarded on purchases.
      */
-    function _forwardFunds() internal virtual {
+    function _forwardFunds() internal {
         _wallet.transfer(msg.value);
     }
 }
